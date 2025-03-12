@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings Page</title>
+  <style>
+    body {
+      background-color: white;
+      color: black;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 50px;
+      transition: background-color 0.3s, color 0.3s, font-size 0.3s;
+    }
+
+    body.dark-mode {
+      background-color: #121212;
+      color: #ffffff;
+    }
+
+    button, select, input {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+      background-color: #f0f0f0;
+      color: #000;
+      transition: background-color 0.3s, color 0.3s;
+      margin: 10px;
+    }
+
+    button:hover, select:hover, input:hover {
+      background-color: #ddd;
+    }
+
+    body.dark-mode button, body.dark-mode select, body.dark-mode input {
+      background-color: #333;
+      color: #fff;
+    }
+
+    body.dark-mode button:hover, body.dark-mode select:hover, body.dark-mode input:hover {
+      background-color: #555;
+    }
+  </style>
+</head>
+<body>
+  <h1>Settings</h1>
+  <p>Customize your experience using the options below.</p>
+
+  <!-- Theme Toggle -->
+  <button id="theme-toggle">Toggle Dark Mode</button>
+
+  <!-- Font Size Adjustment -->
+  <label for="font-size">Font Size:</label>
+  <select id="font-size">
+    <option value="16px">Medium</option>
+    <option value="14px">Small</option>
+    <option value="18px">Large</option>
+  </select>
+
+  <!-- Background Color Picker -->
+  <label for="bg-color">Background Color:</label>
+  <input type="color" id="bg-color" value="#ffffff">
+
+  <!-- Reset to Default -->
+  <button id="reset-settings">Reset to Default</button>
+
+  <!-- Back to Main Page -->
+  <button onclick="window.location.href='index.html'">Back to Main Page</button>
+
+  <script>
+    // Get references to elements
+    const themeToggle = document.getElementById('theme-toggle');
+    const fontSizeSelect = document.getElementById('font-size');
+    const bgColorPicker = document.getElementById('bg-color');
+    const resetButton = document.getElementById('reset-settings');
+    const body = document.body;
+
+    // Load saved settings from localStorage
+    const savedTheme = localStorage.getItem('theme');
+    const savedFontSize = localStorage.getItem('fontSize');
+    const savedBgColor = localStorage.getItem('bgColor');
+
+    if (savedTheme === 'dark') {
+      body.classList.add('dark-mode');
+      themeToggle.textContent = 'Toggle Light Mode';
+    }
+
+    if (savedFontSize) {
+      body.style.fontSize = savedFontSize;
+      fontSizeSelect.value = savedFontSize;
+    }
+
+    if (savedBgColor) {
+      body.style.backgroundColor = savedBgColor;
+      bgColorPicker.value = savedBgColor;
+    }
+
+    // Theme Toggle
+    themeToggle.addEventListener('click', () => {
+      body.classList.toggle('dark-mode');
+      const isDarkMode = body.classList.contains('dark-mode');
+      themeToggle.textContent = isDarkMode ? 'Toggle Light Mode' : 'Toggle Dark Mode';
+      localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+    });
+
+    // Font Size Adjustment
+    fontSizeSelect.addEventListener('change', () => {
+      const selectedFontSize = fontSizeSelect.value;
+      body.style.fontSize = selectedFontSize;
+      localStorage.setItem('fontSize', selectedFontSize);
+    });
+
+    // Background Color Picker
+    bgColorPicker.addEventListener('input', () => {
+      const selectedBgColor = bgColorPicker.value;
+      body.style.backgroundColor = selectedBgColor;
+      localStorage.setItem('bgColor', selectedBgColor);
+    });
+
+    // Reset to Default
+    resetButton.addEventListener('click', () => {
+      body.classList.remove('dark-mode');
+      body.style.fontSize = '16px';
+      body.style.backgroundColor = 'white';
+      themeToggle.textContent = 'Toggle Dark Mode';
+      fontSizeSelect.value = '16px';
+      bgColorPicker.value = '#ffffff';
+      localStorage.removeItem('theme');
+      localStorage.removeItem('fontSize');
+      localStorage.removeItem('bgColor');
+    });
+  </script>
+</body>
+</html>
